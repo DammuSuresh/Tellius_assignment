@@ -1,0 +1,70 @@
+<!DOCTYPE html> 
+<html> 
+
+<head> 
+	<title>Reading File</title> 
+</head> 
+<style>
+    
+</style>
+<body> 
+	<input type="file" id="inputfile"> 
+    <br> 
+    	<h3 id="out">       
+    </h3>
+	<script type="text/javascript"> 
+		document.getElementById('inputfile') 
+			.addEventListener('change', function() { 			
+			var fr=new FileReader(); 
+			fr.onload=function(){ 
+                let array = fr.result.split('\n'); 
+                let length =array.length;
+                var arrnew = [];
+                var singline = [];
+                var multilineids=[];
+                var newMap = array.map((ele,index)=>({id:index,val:ele}));
+                for(let i=0;i<length;i++){
+                    if(array[i].includes('//')){                  
+                      singline.push(i);                 
+                     }
+                }
+                for(let i=0;i<length;i++){
+                        if(newMap[i].val.includes('/*')){
+                        arrnew.push(i);
+                        }
+                        if(array[i].includes('*/')){
+                            var last = i;
+                        arrnew.push(i);
+                        }
+                }
+                for(var i=0;i<length;i++){
+                var index = arrnew.filter((item,idx) => idx < 2);
+                for(var i=index[0];i<=index[1];i++){
+                    multilineids.push(i);
+                }
+                arrnew.splice(0,2);
+                }
+                singline.forEach((item)=>{
+                let index =  newMap.findIndex(val => val.id === item);
+                if(index>-1){
+                    newMap.splice(index,1);
+                }
+                })
+                multilineids.forEach((item)=>{
+                let index =  newMap.findIndex(val => val.id === item);
+                if(index>-1){
+                    newMap.splice(index,1);
+                }
+                });              
+                document.getElementById("out").innerHTML=` Number of valid lines: <strong>${newMap.length}</strong> <button onclick="fnClear()">Clear</button>`;
+			} 			
+			fr.readAsText(this.files[0]); 
+        });
+        function fnClear(){
+            document.getElementById("inputfile").value='';
+            document.getElementById("out").innerHTML='';
+        } 
+	</script> 
+</body> 
+
+</html> 
