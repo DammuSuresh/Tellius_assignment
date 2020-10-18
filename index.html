@@ -27,9 +27,15 @@
                     if(array[i].includes('//')){                  
                       singline.push(i);                 
                      }
+                     if(array[i].trim()===""){                  
+                      singline.push(i);                 
+                     }
                 }
                 for(let i=0;i<length;i++){
-                        if(newMap[i].val.includes('/*')){
+                        if(newMap[i].val.includes('/*') && !newMap[i].val.includes('*/')){
+                        arrnew.push(i);
+                        }
+                        if(newMap[i].val.includes('/*') && newMap[i].val.includes('*/')){
                         arrnew.push(i);
                         }
                         if(array[i].includes('*/')){
